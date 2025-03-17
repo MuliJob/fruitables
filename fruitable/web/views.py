@@ -25,7 +25,7 @@ def shop_page(request):
     return render(request, 'shop.html', context)
 
 
-def product_detail(request):
+def product_detail_page(request):
     """Product detail page function"""
     title = 'FRUITABLES - PRODUCT DETAILS'
 
@@ -34,3 +34,14 @@ def product_detail(request):
     }
 
     return render(request, 'shop-detail.html', context)
+
+
+def cart_page(request):
+    """Product detail page function"""
+    title = 'FRUITABLES - CART'
+
+    context = {
+        "title": title
+    }
+
+    return render(request, 'cart.html', context)
