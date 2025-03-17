@@ -56,3 +56,14 @@ def checkout_page(request):
     }
 
     return render(request, 'checkout.html', context)
+
+
+def testimonial_page(request):
+    """Testimonials page function"""
+    title = 'FRUITABLES - TESTIMONIALS'
+
+    context = {
+        "title": title
+    }
+
+    return render(request, 'testimonial.html', context)
