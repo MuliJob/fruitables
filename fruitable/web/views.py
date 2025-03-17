@@ -37,7 +37,7 @@ def product_detail_page(request):
 
 
 def cart_page(request):
-    """Product detail page function"""
+    """Product cart page function"""
     title = 'FRUITABLES - CART'
 
     context = {
@@ -45,3 +45,14 @@ def cart_page(request):
     }
 
     return render(request, 'cart.html', context)
+
+
+def checkout_page(request):
+    """Product checkout page function"""
+    title = 'FRUITABLES - CHECKOUT'
+
+    context = {
+        "title": title
+    }
+
+    return render(request, 'checkout.html', context)
