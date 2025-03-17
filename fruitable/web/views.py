@@ -67,3 +67,14 @@ def testimonial_page(request):
     }
 
     return render(request, 'testimonial.html', context)
+
+
+def contact_page(request):
+    """Contact page function"""
+    title = 'FRUITABLES - CONTACT'
+
+    context = {
+        "title": title
+    }
+
+    return render(request, 'contact.html', context)
