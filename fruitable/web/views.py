@@ -3,12 +3,23 @@
 """
 from django.shortcuts import render
 
+from .models import Product
+
+
+
 def home_page(request):
     """Home page function"""
     title = 'FRUITABLES - HOME'
 
+    all_organics = Product.objects.all()
+    vegetables = Product.objects.filter(product_category='Vegetables').all()
+    fruits = Product.objects.exclude(product_category='Vegetables').all()
+
     context = {
-        "title": title
+        "title": title,
+        "all_organics": all_organics,
+        "vegetables": vegetables,
+        "fruits": fruits,
     }
 
     return render(request, 'index.html', context)
