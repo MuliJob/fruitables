@@ -144,7 +144,7 @@
                     <div class="row g-4">
                         {% for organic in all_organics %}
                             <div class="col-md-6 col-lg-4 col-xl-3">
-                                <a href="{% url 'product_detail' %}">
+                                <a href="{% url 'product_detail' organic.id %}">
                                     <div class="rounded position-relative fruite-item">
                                         <div class="fruite-img">
                                             <img src="{{ organic.product_image.url }}" class="img-fluid w-100 rounded-top" alt="{{ organic.product_name }}">
@@ -171,7 +171,7 @@
                     <div class="row g-4">
                         {% for vegetable in vegetables %}
                             <div class="col-md-6 col-lg-4 col-xl-3">
-                                <a href="{% url 'product_detail' %}">
+                                <a href="{% url 'product_detail' vegetable.id %}">
                                     <div class="rounded position-relative fruite-item">
                                         <div class="fruite-img">
                                             <img src="{{ vegetable.product_image.url }}" class="img-fluid w-100 rounded-top" alt="{{ vegetable.product_name }}">
@@ -198,7 +198,7 @@
                     <div class="row g-4">
                         {% for fruit in fruits %}
                             <div class="col-md-6 col-lg-4 col-xl-3">
-                                <a href="{% url 'product_detail' %}">
+                                <a href="{% url 'product_detail' fruit.id %}">
                                     <div class="rounded position-relative fruite-item">
                                         <div class="fruite-img">
                                             <img src="{{ fruit.product_image.url }}" class="img-fluid w-100 rounded-top" alt="{{ fruit.product_name }}">

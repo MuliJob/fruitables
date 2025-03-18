@@ -36,12 +36,15 @@ def shop_page(request):
     return render(request, 'shop.html', context)
 
 
-def product_detail_page(request):
+def product_detail_page(request, pk):
     """Product detail page function"""
     title = 'FRUITABLES - PRODUCT DETAILS'
 
+    product_detail = Product.objects.get(pk=pk)
+
     context = {
-        "title": title
+        "title": title,
+        'product_detail': product_detail,
     }
 
     return render(request, 'shop-detail.html', context)
