@@ -303,6 +303,7 @@
 }
 .fruite .fruite-item:hover {
     box-shadow: 0 0 55px rgba(0, 0, 0, 0.4);
+    height: fit-content;
 }
 
 .fruite .fruite-item .fruite-img {

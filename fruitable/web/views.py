@@ -3,12 +3,23 @@
 """
 from django.shortcuts import render
 
+from .models import Product
+
+
+
 def home_page(request):
     """Home page function"""
     title = 'FRUITABLES - HOME'
 
+    all_organics = Product.objects.all().order_by('-created_at')
+    vegetables = Product.objects.filter(product_category='Vegetable').all().order_by('-created_at')
+    fruits = Product.objects.exclude(product_category='Vegetable').all().order_by('-created_at')
+
     context = {
-        "title": title
+        "title": title,
+        "all_organics": all_organics,
+        "vegetables": vegetables,
+        "fruits": fruits,
     }
 
     return render(request, 'index.html', context)
@@ -18,19 +29,28 @@ def shop_page(request):
     """Shop page function"""
     title = 'FRUITABLES - SHOP'
 
+    all_products = Product.objects.all().order_by('-created_at')
+
     context = {
-        "title": title
+        "title": title,
+        "all_products": all_products,
     }
 
     return render(request, 'shop.html', context)
 
 
-def product_detail_page(request):
+def product_detail_page(request, pk):
     """Product detail page function"""
     title = 'FRUITABLES - PRODUCT DETAILS'
 
+    product_detail = Product.objects.get(pk=pk)
+    related_products = Product.objects.exclude(
+        id=product_detail.id).filter(product_category=product_detail.product_category).order_by('-created_at')
+
     context = {
-        "title": title
+        "title": title,
+        'product_detail': product_detail,
+        'related_products': related_products,
     }
 
     return render(request, 'shop-detail.html', context)
