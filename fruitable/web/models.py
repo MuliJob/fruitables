@@ -27,6 +27,7 @@ class Product(models.Model):
                                         )
     product_description = models.TextField(blank=True, null=True)
     product_detail_description = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     objects = models.Manager()
 
