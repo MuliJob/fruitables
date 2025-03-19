@@ -32,14 +32,14 @@
                             <div class="col-lg-6">
                                 <div class="border rounded">
                                     <a href="#">
-                                        <img src="{% static 'img/single-item.jpg' %}" class="img-fluid rounded" alt="Image">
+                                        <img src="{{ product_detail.product_image.url }}" class="img-fluid rounded" alt="{{ product_detail.product_name }}">
                                     </a>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <h4 class="fw-bold mb-3">{{ product_detail.product_name }}</h4>
                                 <p class="mb-3">Category: {{ product_detail.product_category }}</p>
-                                <h5 class="fw-bold mb-3">3,35 $</h5>
+                                <h5 class="fw-bold mb-3">Ksh {{ product_detail.product_price }}</h5>
                                 <div class="d-flex mb-4">
                                     <i class="fa fa-star text-secondary"></i>
                                     <i class="fa fa-star text-secondary"></i>
@@ -47,7 +47,6 @@
                                     <i class="fa fa-star text-secondary"></i>
                                     <i class="fa fa-star"></i>
                                 </div>
-                                <p class="mb-4">{{ product_detail.product_description }}</p>
                                 <p class="mb-4">{{ product_detail.product_description }}</p>
                                 <div class="input-group quantity mb-5" style="width: 100px;">
                                     <div class="input-group-btn">
@@ -77,10 +76,8 @@
                                 </nav>
                                 <div class="tab-content mb-5">
                                     <div class="tab-pane active" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
-                                        <p>The generated Lorem Ipsum is therefore always free from repetition injected humour, or non-characteristic words etc. 
-                                            Susp endisse ultricies nisi vel quam suscipit </p>
-                                        <p>Sabertooth peacock flounder; chain pickerel hatchetfish, pencilfish snailfish filefish Antarctic 
-                                            icefish goldeye aholehole trumpetfish pilot fish airbreathing catfish, electric ray sweeper.</p>
+                                        <p>{{ product_detail.product_detail_description }}</p>
+                                        
                                         <div class="px-2">
                                             <div class="row g-4">
                                                 <div class="col-6">
@@ -89,7 +86,7 @@
                                                             <p class="mb-0">Weight</p>
                                                         </div>
                                                         <div class="col-6">
-                                                            <p class="mb-0">1 kg</p>
+                                                            <p class="mb-0">{{ product_detail.product_weight }} kg</p>
                                                         </div>
                                                     </div>
                                                     <div class="row text-center align-items-center justify-content-center py-2">
@@ -97,7 +94,7 @@
                                                             <p class="mb-0">Country of Origin</p>
                                                         </div>
                                                         <div class="col-6">
-                                                            <p class="mb-0">Agro Farm</p>
+                                                            <p class="mb-0">{{ product_detail.product_origin }}</p>
                                                         </div>
                                                     </div>
                                                     <div class="row bg-light text-center align-items-center justify-content-center py-2">
@@ -105,7 +102,7 @@
                                                             <p class="mb-0">Quality</p>
                                                         </div>
                                                         <div class="col-6">
-                                                            <p class="mb-0">Organic</p>
+                                                            <p class="mb-0">{{ product_detail.product_quality }}</p>
                                                         </div>
                                                     </div>
                                                     <div class="row text-center align-items-center justify-content-center py-2">
@@ -113,7 +110,7 @@
                                                             <p class="mb-0">Сheck</p>
                                                         </div>
                                                         <div class="col-6">
-                                                            <p class="mb-0">Healthy</p>
+                                                            <p class="mb-0">{{ product_detail.product_check }}</p>
                                                         </div>
                                                     </div>
                                                     <div class="row bg-light text-center align-items-center justify-content-center py-2">
@@ -121,7 +118,7 @@
                                                             <p class="mb-0">Min Weight</p>
                                                         </div>
                                                         <div class="col-6">
-                                                            <p class="mb-0">250 Kg</p>
+                                                            <p class="mb-0">{{ product_detail.product_min_weight }} Kg</p>
                                                         </div>
                                                     </div>
                                                 </div>
