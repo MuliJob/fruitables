@@ -164,31 +164,31 @@ def transfer_session_cart(request):
         del request.session["cart"]
         request.session.modified = True
 
-# def cart_update(request, pk, action):
-#     """Increase or decrease cart item quantity."""
-#     product = get_object_or_404(Product, pk=pk)
+def cart_update(request, pk, action):
+    """Increase or decrease cart item quantity."""
+    product = get_object_or_404(Product, pk=pk)
 
-#     if request.user.is_authenticated:
-#         cart_obj = Cart.objects.filter(user=request.user).first()
-#         if cart_obj:
-#             cart_item = CartItem.objects.filter(cart=cart_obj, product=product).first()
-#             if cart_item:
-#                 if action == "increase":
-#                     cart_item.product_quantity += 1
-#                 elif action == "decrease" and cart_item.product_quantity > 1:
-#                     cart_item.product_quantity -= 1
-#                 cart_item.save()
-#     else:
-#         session_cart = request.session.get("cart", {})
-#         if str(pk) in session_cart:
-#             if action == "increase":
-#                 session_cart[str(pk)]["quantity"] += 1
-#             elif action == "decrease" and session_cart[str(pk)]["quantity"] > 1:
-#                 session_cart[str(pk)]["quantity"] -= 1
-#             request.session["cart"] = session_cart
-#             request.session.modified = True
+    if request.user.is_authenticated:
+        cart_obj = Cart.objects.filter(user=request.user).first()
+        if cart_obj:
+            cart_item = CartItem.objects.filter(cart=cart_obj, product=product).first()
+            if cart_item:
+                if action == "increase":
+                    cart_item.product_quantity += 1
+                elif action == "decrease" and cart_item.product_quantity > 1:
+                    cart_item.product_quantity -= 1
+                cart_item.save()
+    else:
+        session_cart = request.session.get("cart", {})
+        if str(pk) in session_cart:
+            if action == "increase":
+                session_cart[str(pk)]["quantity"] += 1
+            elif action == "decrease" and session_cart[str(pk)]["quantity"] > 1:
+                session_cart[str(pk)]["quantity"] -= 1
+            request.session["cart"] = session_cart
+            request.session.modified = True
 
-#     return redirect("cart_page")
+    return redirect("cart_page")
 
 # def cart_remove(request, pk):
 #     """Remove an item from the cart."""
