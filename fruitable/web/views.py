@@ -2,6 +2,7 @@
   Web view functions
 """
 from django.shortcuts import render
+from django.db.models import Count
 
 from .models import Product
 
@@ -45,12 +46,16 @@ def product_detail_page(request, pk):
 
     product_detail = Product.objects.get(pk=pk)
     related_products = Product.objects.exclude(
-        id=product_detail.id).filter(product_category=product_detail.product_category).order_by('-created_at')
+        id=product_detail.id).filter(
+            product_category=product_detail.product_category).order_by('-created_at')
+    categories = Product.objects.values(
+        'product_category').annotate(count=Count('product_category'))
 
     context = {
         "title": title,
         'product_detail': product_detail,
         'related_products': related_products,
+        'categories': categories,
     }
 
     return render(request, 'shop-detail.html', context)
