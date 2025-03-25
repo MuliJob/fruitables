@@ -14,7 +14,7 @@ class Product(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product_name = models.CharField(max_length=255, blank=True, null=True)
     product_image = models.ImageField(blank=True, null=True, upload_to='products/')
-    product_price = models.CharField(max_length=10, blank=True, null=True)
+    product_price = models.DecimalField(max_digits=10, decimal_places=2)
     product_weight = models.CharField(max_length=10, blank=True, null=True)
     product_origin = models.CharField(max_length=50, blank=True, null=True)
     product_quality = models.CharField(max_length=20, blank=True, null=True)
@@ -50,6 +50,12 @@ class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     product_quantity = models.IntegerField(default=1)
+    shipping_fee = models.DecimalField(max_digits=9,decimal_places=2, default=50.00)
     # user = models.OneToOneField(User)
 
     objects = models.Manager()
+
+    @property
+    def total_price(self):
+        """Getting total price"""
+        return (self.product.product_price * self.product_quantity) + self.shipping_fee
