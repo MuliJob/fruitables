@@ -38,10 +38,12 @@ class Product(models.Model):
 
 class Cart(models.Model):
     """Cart products"""
-    cart_id = models.CharField(primary_key=True)
+    cart_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     total = models.DecimalField(max_digits=9,decimal_places=2)
     quantity = models.IntegerField()
     # user = models.OneToOneField(User)
+
+    objects = models.Manager()
 
 class CartItem(models.Model):
     """Cart Items"""
@@ -49,3 +51,5 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     product_quantity = models.IntegerField(default=1)
     # user = models.OneToOneField(User)
+
+    objects = models.Manager()

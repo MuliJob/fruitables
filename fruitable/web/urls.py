@@ -22,6 +22,7 @@ urlpatterns = [
     path('shop', views.shop_page, name="shop"),
     path('product-details/<uuid:pk>', views.product_detail_page, name="product_detail"),
     path('cart', views.cart_page, name="cart"),
+    path('cart-add/<uuid:pk>', views.cart_add, name="cart_add"),
     path('checkout', views.checkout_page, name="checkout"),
     path('testimonial', views.testimonial_page, name="testimonial"),
     path('contact', views.contact_page, name="contact"),

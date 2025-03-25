@@ -155,7 +155,7 @@
                                             <p>{{ organic.product_description|truncatewords:10 }}</p>
                                             <div class="d-flex justify-content-center flex-lg-wrap">
                                                 <p class="text-dark fs-5 fw-bold mb-3">Ksh.{{ organic.product_price }} / kg</p>
-                                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                <a href="{% url 'cart_add' organic.id %}" class="btn border border-secondary rounded-pill px-3 text-primary">
                                                     <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
                                                 </a>
                                             </div>
@@ -182,7 +182,7 @@
                                             <p>{{ vegetable.product_description|truncatewords:10 }}</p>
                                             <div class="d-flex justify-content-center flex-lg-wrap">
                                                 <p class="text-dark fs-5 fw-bold mb-3">Ksh.{{ vegetable.product_price }} / kg</p>
-                                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                <a href="{% url 'cart_add' vegetable.id %}" class="btn border border-secondary rounded-pill px-3 text-primary">
                                                     <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
                                                 </a>
                                             </div>
@@ -209,7 +209,8 @@
                                             <p>{{ fruit.product_description|truncatewords:10 }}</p>
                                             <div class="d-flex justify-content-center flex-lg-wrap">
                                                 <p class="text-dark fs-5 fw-bold mb-3">Ksh.{{ fruit.product_price }} / kg</p>
-                                                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
+        
+                                                <a href="{% url 'cart_add' fruit.id %}" class="btn border border-secondary rounded-pill px-3 text-primary">
                                                     <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
                                                 </a>
                                             </div>
@@ -293,7 +294,7 @@
                             <p>{{ vegetable.product_description|truncatewords:10 }}</p>
                             <div class="d-flex justify-content-center flex-lg-wrap">
                                 <p class="text-dark fs-5 fw-bold">{{ vegetable.product_price }} / kg</p>
-                                <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                <a href="{% url 'cart_add' vegetable.id %}" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                             </div>
                         </div>
                     </div>

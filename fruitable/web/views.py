@@ -3,8 +3,11 @@
 """
 from django.shortcuts import render
 from django.db.models import Count
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
 
-from .models import Product
+
+from .models import Cart, CartItem, Product
 
 
 def home_page(request):
@@ -69,6 +72,71 @@ def cart_page(request):
     }
 
     return render(request, 'cart.html', context)
+
+
+def cart_add(request, pk, qty=1):
+    """Adding item to cart"""
+    item = get_object_or_404(Product, pk=pk)
+
+    if request.user.is_authenticated:
+        # Logged-in user: Use database cart
+        cart_obj, created = Cart.objects.get_or_create(
+            user=request.user, defaults={"total": 0, "quantity": 0})
+
+        # Check if the item is already in the cart
+        cart_item, item_created = CartItem.objects.get_or_create(
+            cart=cart_obj,
+            product=item,
+            defaults={"product_quantity": qty}
+        )
+
+        if not item_created:
+            cart_item.product_quantity += qty
+            cart_item.save()
+
+        print("Item added to user cart")
+
+    else:
+        # Guest user: Use session-based cart
+        cart = request.session.get("cart", {})
+
+        if str(pk) in cart:
+            cart[str(pk)]["quantity"] += qty
+        else:
+            cart[str(pk)] = {
+                "product_name": item.product_name,
+                "product_price": item.product_price,
+                "quantity": qty
+            }
+
+        request.session["cart"] = cart  # Save cart to session
+        request.session.modified = True
+
+        print("Item added to session cart")
+
+    return JsonResponse({"message": "Item added to cart successfully"})
+
+
+def transfer_session_cart(request):
+    """Transfer session cart items to user cart after login"""
+    if request.user.is_authenticated and "cart" in request.session:
+        cart_obj, created = Cart.objects.get_or_create(
+            user=request.user, defaults={"total": 0, "quantity": 0})
+
+        for pk, item in request.session["cart"].items():
+            product = Product.objects.get(pk=pk)
+            cart_item, item_created = CartItem.objects.get_or_create(
+                cart=cart_obj,
+                product=product,
+                defaults={"product_quantity": item["quantity"]}
+            )
+
+            if not item_created:
+                cart_item.product_quantity += item["quantity"]
+                cart_item.save()
+
+        del request.session["cart"]  # Clear session cart
+        request.session.modified = True
 
 
 def checkout_page(request):
