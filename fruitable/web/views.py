@@ -37,10 +37,13 @@ def shop_page(request):
     title = 'FRUITABLES - SHOP'
 
     all_products = Product.objects.all().order_by('-created_at')
+    categories = Product.objects.values(
+        'product_category').annotate(count=Count('product_category'))
 
     context = {
         "title": title,
         "all_products": all_products,
+        'categories': categories,
     }
 
     return render(request, 'shop.html', context)
