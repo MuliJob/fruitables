@@ -190,20 +190,20 @@ def cart_update(request, pk, action):
 
     return redirect("cart_page")
 
-# def cart_remove(request, pk):
-#     """Remove an item from the cart."""
-#     if request.user.is_authenticated:
-#         cart_obj = Cart.objects.filter(user=request.user).first()
-#         if cart_obj:
-#             CartItem.objects.filter(cart=cart_obj, product_id=pk).delete()
-#     else:
-#         session_cart = request.session.get("cart", {})
-#         if str(pk) in session_cart:
-#             del session_cart[str(pk)]
-#             request.session["cart"] = session_cart
-#             request.session.modified = True
+def cart_remove(request, pk):
+    """Remove an item from the cart."""
+    if request.user.is_authenticated:
+        cart_obj = Cart.objects.filter(user=request.user).first()
+        if cart_obj:
+            CartItem.objects.filter(cart=cart_obj, product_id=pk).delete()
+    else:
+        session_cart = request.session.get("cart", {})
+        if str(pk) in session_cart:
+            del session_cart[str(pk)]
+            request.session["cart"] = session_cart
+            request.session.modified = True
 
-#     return redirect("cart_page")
+    return redirect("cart_page")
 
 
 def checkout_page(request):
