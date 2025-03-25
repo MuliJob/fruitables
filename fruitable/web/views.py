@@ -7,7 +7,6 @@ from django.db.models import Count
 from .models import Product
 
 
-
 def home_page(request):
     """Home page function"""
     title = 'FRUITABLES - HOME'

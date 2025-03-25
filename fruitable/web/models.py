@@ -32,4 +32,20 @@ class Product(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return self.product_name
+        """Returns the string representation of the product"""
+        return self.product_name or "Unnamed Product"
+
+
+class Cart(models.Model):
+    """Cart products"""
+    cart_id = models.CharField(primary_key=True)
+    total = models.DecimalField(max_digits=9,decimal_places=2)
+    quantity = models.IntegerField()
+    # user = models.OneToOneField(User)
+
+class CartItem(models.Model):
+    """Cart Items"""
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product_quantity = models.IntegerField(default=1)
+    # user = models.OneToOneField(User)
