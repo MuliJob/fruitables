@@ -25,6 +25,26 @@
 
         <!-- Fruits Shop Start-->
         <div class="container-fluid fruite py-5">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert 
+                        {% if message.tags == 'success' %}
+                            alert-success
+                        {% elif message.tags == 'error' %}
+                            alert-danger
+                        {% elif message.tags == 'warning' %}
+                            alert-warning
+                        {% else %}
+                            alert-info
+                        {% endif %}
+                        alert-dismissible fade show" role="alert">
+                        
+                        <strong>{{ message }}</strong>
+                        
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
             <div class="container py-5">
                 <h1 class="mb-4">Fresh fruits shop</h1>
                 <div class="row g-4">
@@ -210,8 +230,8 @@
                                                         <h4>{{ product.product_name }}</h4>
                                                         <p>{{ product.product_description|truncatewords:10 }}</p>
                                                         <div class="d-flex flex-column align-items-center">
-                                                            <p class="text-dark fs-5 fw-bold mb-0">Ksh{{ product.product_price }} / kg</p>
-                                                            <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                            <p class="text-dark fs-5 fw-bold mb-3">Ksh{{ product.product_price }} / kg</p>
+                                                            <a href="{% url 'cart_add' product.id %}" class="btn border border-secondary rounded-pill px-3 text-primary">
                                                                 <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
                                                             </a>
                                                         </div>

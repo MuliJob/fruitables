@@ -25,6 +25,27 @@
 
         <!-- Single Product Start -->
         <div class="container-fluid py-5 mt-5">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert 
+                        {% if message.tags == 'success' %}
+                            alert-success
+                        {% elif message.tags == 'error' %}
+                            alert-danger
+                        {% elif message.tags == 'warning' %}
+                            alert-warning
+                        {% else %}
+                            alert-info
+                        {% endif %}
+                        alert-dismissible fade show" role="alert">
+                        
+                        <strong>{{ message }}</strong>
+                        
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
             <div class="container py-5">
                 <div class="row g-4 mb-5">
                     <div class="col-lg-8 col-xl-9">
@@ -217,38 +238,16 @@
                                 </div>
                                 <div class="mb-4">
                                     <h4>Categories</h4>
-                                    <ul class="list-unstyled fruite-categorie">
-                                        <li>
-                                            <div class="d-flex justify-content-between fruite-name">
-                                                <a href="#"><i class="fas fa-apple-alt me-2"></i>Apples</a>
-                                                <span>(3)</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="d-flex justify-content-between fruite-name">
-                                                <a href="#"><i class="fas fa-apple-alt me-2"></i>Oranges</a>
-                                                <span>(5)</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="d-flex justify-content-between fruite-name">
-                                                <a href="#"><i class="fas fa-apple-alt me-2"></i>Strawbery</a>
-                                                <span>(2)</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="d-flex justify-content-between fruite-name">
-                                                <a href="#"><i class="fas fa-apple-alt me-2"></i>Banana</a>
-                                                <span>(8)</span>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="d-flex justify-content-between fruite-name">
-                                                <a href="#"><i class="fas fa-apple-alt me-2"></i>Pumpkin</a>
-                                                <span>(5)</span>
-                                            </div>
-                                        </li>
-                                    </ul>
+                                    {% for category in categories %}
+                                        <ul class="list-unstyled fruite-categorie">
+                                            <li>
+                                                <div class="d-flex justify-content-between fruite-name">
+                                                    <a href="#"><i class="fas fa-apple-alt me-2"></i>{{ category.product_category }}</a>
+                                                    <span>({{ category.count }})</span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="col-lg-12">
@@ -396,8 +395,8 @@
                                         <h4>{{ related_product.product_name }}</h4>
                                         <p>{{ related_product.product_description|truncatewords:10 }}</p>
                                         <div class="d-flex justify-content-center flex-lg-wrap">
-                                            <p class="text-dark fs-5 fw-bold">Ksh. {{ related_product.product_price }} / kg</p>
-                                            <a href="#" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+                                            <p class="text-dark fs-5 fw-bold mb-3">Ksh. {{ related_product.product_price }} / kg</p>
+                                            <a href="{% url 'cart_add' related_product.id %}" class="btn border border-secondary rounded-pill px-3 py-1 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                                         </div>
                                     </div>
                                 </div>
