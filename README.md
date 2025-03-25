@@ -1,2 +1,2 @@
 # fruitables
-A fruit selling e-commerce web app
+A fruit selling and vegetables e-commerce web app
