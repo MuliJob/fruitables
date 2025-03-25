@@ -70,40 +70,40 @@ def product_detail_page(request, pk):
 def cart_page(request):
     """Product cart page function"""
     title = "FRUITABLES - CART"
-    # cart_items = []
-    # total_price = 0
-    # total_shipping_fee = 0
+    cart_items = []
+    total_price = 0
+    total_shipping_fee = 0
 
-    # if request.user.is_authenticated:
-    #     cart_obj = Cart.objects.filter(user=request.user).first()
-    #     if cart_obj:
-    #         cart_items = CartItem.objects.filter(cart=cart_obj)
-    #         total_price = sum(item.total_price for item in cart_items)
-    #         total_shipping_fee = sum(item.shipping_fee for item in cart_items)
-    # else:
-    #     session_cart = request.session.get("cart", {})
-    #     for pk, item in session_cart.items():
-    #         product = get_object_or_404(Product, pk=pk)
-    #         shipping_fee = product.shipping_fee if hasattr(product, "shipping_fee") else 0
+    if request.user.is_authenticated:
+        cart_obj = Cart.objects.filter(user=request.user).first()
+        if cart_obj:
+            cart_items = CartItem.objects.filter(cart=cart_obj)
+            total_price = sum(item.total_price for item in cart_items)
+            total_shipping_fee = sum(item.shipping_fee for item in cart_items)
+    else:
+        session_cart = request.session.get("cart", {})
+        for pk, item in session_cart.items():
+            product = get_object_or_404(Product, pk=pk)
+            shipping_fee = product.shipping_fee if hasattr(product, "shipping_fee") else 0
 
-    #         cart_items.append({
-    #             "product": product,
-    #             "product_quantity": item["quantity"],
-    #             "total_price": product.product_price * item["quantity"],
-    #             "shipping_fee": shipping_fee,
-    #         })
-    #         total_price += product.product_price * item["quantity"]
-    #         total_shipping_fee += shipping_fee
+            cart_items.append({
+                "product": product,
+                "product_quantity": item["quantity"],
+                "total_price": product.product_price * item["quantity"],
+                "shipping_fee": shipping_fee,
+            })
+            total_price += product.product_price * item["quantity"]
+            total_shipping_fee += shipping_fee
 
-    # grand_total = total_price + total_shipping_fee
+    grand_total = total_price + total_shipping_fee
 
-    # context = {
-    #     "title": title,
-    #     "cart_items": cart_items,
-    #     "total_price": total_price,
-    #     "total_shipping_fee": total_shipping_fee,
-    #     "grand_total": grand_total,
-    # }
+    context = {
+        "title": title,
+        "cart_items": cart_items,
+        "total_price": total_price,
+        "total_shipping_fee": total_shipping_fee,
+        "grand_total": grand_total,
+    }
 
     return render(request, "cart.html", context)
 
