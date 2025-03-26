@@ -3,6 +3,7 @@
 """
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
 
 
 PRODUCT_CATEGORIES = (
@@ -41,19 +42,23 @@ class Cart(models.Model):
     cart_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     total = models.DecimalField(max_digits=9,decimal_places=2)
     quantity = models.IntegerField()
-    # user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
 
     objects = models.Manager()
 
 class CartItem(models.Model):
     """Cart Items"""
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='product', on_delete=models.CASCADE)
     product_quantity = models.IntegerField(default=1)
-    shipping_fee = models.DecimalField(max_digits=9,decimal_places=2, default=50.00)
-    # user = models.OneToOneField(User)
+    shipping_fee = models.DecimalField(max_digits=9,decimal_places=2, default=0.00)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
 
     objects = models.Manager()
+
+    def __str__(self):
+        """Returns the string representation of the product"""
+        return self.product.product_name or "Unnamed Product"
 
     @property
     def total_price(self):
