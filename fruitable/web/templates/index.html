@@ -162,7 +162,7 @@
             <div class="tab-content">
                 <div id="tab-1" class="tab-pane fade show p-0 active">
                     <div class="row g-4">
-                        {% for organic in all_organics %}
+                        {% for organic in all_page_obj %}
                             <div class="col-md-6 col-lg-4 col-xl-3">
                                 <a href="{% url 'product_detail' organic.id %}">
                                     <div class="rounded position-relative fruite-item">
@@ -184,6 +184,23 @@
                                 </a>
                             </div>
                         {% endfor %}
+                    </div>
+                    <div class="pagination d-flex justify-content-center mt-5">
+                        {% if all_page_obj.has_previous %}
+                            <a href="?home={{ all_page_obj.previous_page_number }}" class="rounded pagination-link" data-page="{{ all_page_obj.previous_page_number }}">&laquo;</a>
+                        {% endif %}
+                
+                        {% for num in all_page_obj.paginator.page_range %}
+                            {% if all_page_obj.number == num %}
+                                <a href="?home={{ num }}" class="active rounded pagination-link" data-page="{{ num }}">{{ num }}</a>
+                            {% else %}
+                                <a href="?home={{ num }}" class="rounded pagination-link" data-page="{{ num }}">{{ num }}</a>
+                            {% endif %}
+                        {% endfor %}
+                
+                        {% if all_page_obj.has_next %}
+                            <a href="?home={{ all_page_obj.next_page_number }}" class="rounded pagination-link" data-page="{{ all_page_obj.next_page_number }}">&raquo;</a>
+                        {% endif %}
                     </div>
                 </div>
                 
@@ -542,6 +559,25 @@
     </div>
   </div>
   <!-- Tastimonial End -->
+
+  <!-- Javascript code snippets -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".pagination-link").forEach(link => {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                let page = this.getAttribute("data-page");
+
+                window.history.pushState(null, "", `?home=${page}`);
+
+                location.reload();
+            });
+        });
+    });
+</script>
+
+
 
 </body>
 </html>

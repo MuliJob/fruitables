@@ -20,12 +20,16 @@ def home_page(request):
     title = 'FRUITABLES - HOME'
 
     all_organics = Product.objects.all().order_by('-created_at')
+    paginator = Paginator(all_organics, 8)
+    page_number = request.GET.get("home")
+    all_page_obj = paginator.get_page(page_number)
+
     vegetables = Product.objects.filter(product_category='Vegetable').all().order_by('-created_at')
     fruits = Product.objects.exclude(product_category='Vegetable').all().order_by('-created_at')
 
     context = {
         "title": title,
-        "all_organics": all_organics,
+        "all_page_obj": all_page_obj,
         "vegetables": vegetables,
         "fruits": fruits,
     }
