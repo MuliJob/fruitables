@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
+from django.core.paginator import Paginator
 
 from decimal import Decimal
 
@@ -37,12 +38,16 @@ def shop_page(request):
     title = 'FRUITABLES - SHOP'
 
     all_products = Product.objects.all().order_by('-created_at')
+    paginator = Paginator(all_products, 9)
+    page_number = request.GET.get("shop")
+    page_obj = paginator.get_page(page_number)
+
     categories = Product.objects.values(
         'product_category').annotate(count=Count('product_category'))
 
     context = {
         "title": title,
-        "all_products": all_products,
+        "page_obj": page_obj,
         'categories': categories,
     }
 
