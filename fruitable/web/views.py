@@ -116,7 +116,7 @@ def cart_add(request, pk, qty=1):
     item = get_object_or_404(Product, pk=pk)
 
     if request.user.is_authenticated:
-        cart_obj = Cart.objects.get_or_create(
+        cart_obj, created = Cart.objects.get_or_create(
             user=request.user, defaults={"total": Decimal(0), "quantity": 0})
 
         # Check if the product already exists in the cart
@@ -149,7 +149,7 @@ def cart_add(request, pk, qty=1):
 def transfer_session_cart(request):
     """Transfer session cart items to user cart after login"""
     if request.user.is_authenticated and "cart" in request.session:
-        cart_obj = Cart.objects.get_or_create(
+        cart_obj, created = Cart.objects.get_or_create(
             user=request.user, defaults={"total": 0, "quantity": 0})
 
         for pk, item in request.session["cart"].items():
@@ -199,12 +199,14 @@ def cart_remove(request, pk):
         cart_obj = Cart.objects.filter(user=request.user).first()
         if cart_obj:
             CartItem.objects.filter(cart=cart_obj, product_id=pk).delete()
+            messages.success(request, "Item removed from cart.")
     else:
         session_cart = request.session.get("cart", {})
         if str(pk) in session_cart:
             del session_cart[str(pk)]
             request.session["cart"] = session_cart
             request.session.modified = True
+            messages.success(request, "Item removed from cart.")
 
     return redirect("cart_page")
 
