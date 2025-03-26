@@ -68,12 +68,14 @@ def product_detail_page(request, pk):
             product_category=product_detail.product_category).order_by('-created_at')
     categories = Product.objects.values(
         'product_category').annotate(count=Count('product_category'))
+    fruits = Product.objects.exclude(product_category='Vegetable').all().order_by('-created_at')[:4]
 
     context = {
         "title": title,
         'product_detail': product_detail,
         'related_products': related_products,
         'categories': categories,
+        'fruits': fruits,
     }
 
     return render(request, 'shop-detail.html', context)
