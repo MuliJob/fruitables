@@ -194,7 +194,7 @@
                             </div>
                             <div class="col-lg-9">
                                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 justify-content-start">
-                                    {% for product in all_products %}
+                                    {% for product in page_obj %}
                                         <div class="col">
                                             <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
                                                 <div class="rounded position-relative fruite-item">
@@ -218,20 +218,29 @@
                                             </a>
                                         </div>
                                     {% endfor %}
-                                </div>
+                                </div>           
                                 
-                                    <div class="col-12">
-                                        <div class="pagination d-flex justify-content-center mt-5">
-                                            <a href="#" class="rounded">&laquo;</a>
-                                            <a href="#" class="active rounded">1</a>
-                                            <a href="#" class="rounded">2</a>
-                                            <a href="#" class="rounded">3</a>
-                                            <a href="#" class="rounded">4</a>
-                                            <a href="#" class="rounded">5</a>
-                                            <a href="#" class="rounded">6</a>
-                                            <a href="#" class="rounded">&raquo;</a>
-                                        </div>
+                                <div class="col-12">
+                                    <div class="pagination d-flex justify-content-center mt-5">
+                                        {% if page_obj.has_previous %}
+                                            <a href="?shop={{ page_obj.previous_page_number }}" class="rounded">&laquo;</a>
+                                        {% else %}
+                                        {% endif %}
+                                
+                                        {% for num in page_obj.paginator.page_range %}
+                                            {% if page_obj.number == num %}
+                                                <a href="?shop={{ num }}" class="active rounded">{{ num }}</a>
+                                            {% else %}
+                                                <a href="?shop={{ num }}" class="rounded">{{ num }}</a>
+                                            {% endif %}
+                                        {% endfor %}
+                                
+                                        {% if page_obj.has_next %}
+                                            <a href="?shop={{ page_obj.next_page_number }}" class="rounded">&raquo;</a>
+                                        {% else %}
+                                        {% endif %}
                                     </div>
+                                </div>
                             </div>
                         </div>
                     </div>
