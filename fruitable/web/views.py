@@ -1,6 +1,8 @@
 """
   Web view functions
 """
+from decimal import Decimal
+# from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.db.models import Count
@@ -8,9 +10,9 @@ from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 
-from decimal import Decimal
 
-from .models import Cart, CartItem, Product
+from .models import Cart, CartItem, Product, Review
+from .forms import ReviewForm
 
 
 
@@ -69,6 +71,21 @@ def product_detail_page(request, pk):
     categories = Product.objects.values(
         'product_category').annotate(count=Count('product_category'))
     fruits = Product.objects.exclude(product_category='Vegetable').all().order_by('-created_at')[:4]
+    reviews = Review.objects.filter(product=pk).order_by('-created_at')
+
+    if request.method == "POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.save()
+            messages.success(request, "Review posted successful")
+
+            return redirect("product_detail", pk=pk)
+        else:
+            messages.error(request,
+                           "Something happened when posting your review. Please try again!")
+    else:
+        form = ReviewForm()
 
     context = {
         "title": title,
@@ -76,6 +93,8 @@ def product_detail_page(request, pk):
         'related_products': related_products,
         'categories': categories,
         'fruits': fruits,
+        "form": form,
+        "reviews": reviews,
     }
 
     return render(request, 'shop-detail.html', context)
