@@ -4,6 +4,8 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.timezone import now
+
 
 
 PRODUCT_CATEGORIES = (
@@ -64,3 +66,18 @@ class CartItem(models.Model):
     def total_price(self):
         """Getting total price"""
         return (self.product.product_price * self.product_quantity) + self.shipping_fee
+
+
+class Review(models.Model):
+    """Review model"""
+    name = models.CharField(max_length=100, blank=False)
+    email = models.EmailField(blank=False, null=False)
+    description = models.CharField(blank=False)
+    product = models.ForeignKey(Product, related_name='review_product', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        """Returns the string representation of the user review"""
+        return self.name or "Unnamed"
