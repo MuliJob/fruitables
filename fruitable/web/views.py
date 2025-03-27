@@ -77,6 +77,7 @@ def product_detail_page(request, pk):
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
+            review.product = Product.objects.get(id=pk)
             review.save()
             messages.success(request, "Review posted successful")
 
