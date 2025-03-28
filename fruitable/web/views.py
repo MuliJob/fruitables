@@ -51,10 +51,14 @@ def shop_page(request):
     categories = Product.objects.values(
         'product_category').annotate(count=Count('product_category'))
 
+    vegetables = Product.objects.exclude(
+        product_category='Fruits').all().order_by('-created_at')[:3]
+
     context = {
         "title": title,
         "page_obj": page_obj,
         'categories': categories,
+        "vegetables": vegetables,
     }
 
     return render(request, 'shop.html', context)
