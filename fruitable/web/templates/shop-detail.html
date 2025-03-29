@@ -148,11 +148,13 @@
                                                         <div class="d-flex justify-content-between">
                                                             <h5>{{ review.name }}</h5>
                                                             <div class="d-flex mb-3">
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star"></i>
+                                                                {% for i in "12345" %}
+                                                                    {% if forloop.counter <= review.star %}
+                                                                        <i class="fa fa-star text-secondary"></i>
+                                                                    {% else %}
+                                                                        <i class="fa fa-star text-muted"></i>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             </div>
                                                         </div>
                                                         <p>{{ review.description }}</p>
