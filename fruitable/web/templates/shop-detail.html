@@ -67,11 +67,13 @@
                                 <p class="mb-3">Category: {{ product_detail.product_category }}</p>
                                 <h5 class="fw-bold mb-3">Ksh {{ product_detail.product_price }}</h5>
                                 <div class="d-flex mb-4">
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star"></i>
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= average_rating%}
+                                            <i class="fa fa-star text-warning"></i>  {# Filled star #}
+                                        {% else %}
+                                            <i class="fa fa-star text-muted"></i>  {# Unfilled star #}
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
                                 <p class="mb-4">{{ product_detail.product_description }}</p>
                                 <a href="{% url 'cart_add' product_detail.id %}" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
