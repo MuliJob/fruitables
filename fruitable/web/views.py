@@ -81,12 +81,14 @@ def product_detail_page(request, pk):
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.product = Product.objects.get(id=pk)
+            review.product = get_object_or_404(Product, id=pk)
+            review.star = request.POST.get('star', 1)
             review.save()
             messages.success(request, "Review posted successful")
 
             return redirect("product_detail", pk=pk)
         else:
+            print("Form Errors:", form.errors)
             messages.error(request,
                            "Something happened when posting your review. Please try again!")
     else:

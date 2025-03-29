@@ -8,14 +8,10 @@ from .models import Review
 
 class ReviewForm(forms.ModelForm):
     """Review form"""
-    name = forms.CharField(max_length=100, required=True)
-    email = forms.EmailField(max_length=100, required=True)
-    description = forms.CharField(required=True)
-
     class Meta:
         '''Class Meta'''
         model = Review
-        fields = ['email', 'name', 'description']
+        fields = ['email', 'name', 'description', 'star']
 
     def clean(self):
         cleaned_data = super().clean()
