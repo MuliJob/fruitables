@@ -130,11 +130,13 @@
                                                     <div>
                                                         <h6 class="mb-2">{{ vegetable.product_name }}</h6>
                                                         <div class="d-flex mb-2">
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                            <i class="fa fa-star text-secondary"></i>
-                                                            <i class="fa fa-star"></i>
+                                                            {% for i in "12345" %}
+                                                                {% if forloop.counter <= vegetable.get_average_rating %}
+                                                                    <i class="fa fa-star text-secondary"></i>
+                                                                {% else %}
+                                                                    <i class="fa fa-star text-muted"></i>
+                                                                {% endif %}
+                                                            {% endfor %}
                                                         </div>
                                                         <div class="d-flex mb-2">
                                                             <h5 class="fw-bold me-2">Sh{{ vegetable.product_price }}</h5>
