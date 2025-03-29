@@ -77,8 +77,7 @@ def product_detail_page(request, pk):
     fruits = Product.objects.exclude(product_category='Vegetable').all().order_by('-created_at')[:4]
     reviews = Review.objects.filter(product=pk).order_by('-created_at')
 
-    average_rating = reviews.aggregate(avg_rating=Avg('star'))['avg_rating']
-    average_rating = round(average_rating or 0, 1)
+    average_rating = product_detail.get_average_rating()
 
     print(f"Average Rating for Product {product_detail.id}: {average_rating}")
 
