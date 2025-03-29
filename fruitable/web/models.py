@@ -73,6 +73,7 @@ class Review(models.Model):
     name = models.CharField(max_length=100, blank=False)
     email = models.EmailField(blank=False, null=False)
     description = models.CharField(blank=False)
+    star = models.PositiveIntegerField(choices=[(i, i) for i in range(1, 6)], default=1, blank=True)
     product = models.ForeignKey(Product, related_name='review_product', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
