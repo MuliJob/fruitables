@@ -5,7 +5,7 @@ from decimal import Decimal
 # from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from django.db.models import Count
+from django.db.models import Avg, Count
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -68,7 +68,7 @@ def product_detail_page(request, pk):
     """Product detail page function"""
     title = 'FRUITABLES - PRODUCT DETAILS'
 
-    product_detail = Product.objects.get(pk=pk)
+    product_detail = get_object_or_404(Product, pk=pk)
     related_products = Product.objects.exclude(
         id=product_detail.id).filter(
             product_category=product_detail.product_category).order_by('-created_at')
@@ -77,16 +77,22 @@ def product_detail_page(request, pk):
     fruits = Product.objects.exclude(product_category='Vegetable').all().order_by('-created_at')[:4]
     reviews = Review.objects.filter(product=pk).order_by('-created_at')
 
+    average_rating = product_detail.get_average_rating()
+
+    print(f"Average Rating for Product {product_detail.id}: {average_rating}")
+
     if request.method == "POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
             review = form.save(commit=False)
-            review.product = Product.objects.get(id=pk)
+            review.product = get_object_or_404(Product, id=pk)
+            review.star = request.POST.get('star', 1)
             review.save()
             messages.success(request, "Review posted successful")
 
             return redirect("product_detail", pk=pk)
         else:
+            print("Form Errors:", form.errors)
             messages.error(request,
                            "Something happened when posting your review. Please try again!")
     else:
@@ -100,6 +106,7 @@ def product_detail_page(request, pk):
         'fruits': fruits,
         "form": form,
         "reviews": reviews,
+        "average_rating": average_rating,
     }
 
     return render(request, 'shop-detail.html', context)

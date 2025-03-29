@@ -4,7 +4,7 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.timezone import now
+from django.db.models import Avg
 
 
 
@@ -37,6 +37,11 @@ class Product(models.Model):
     def __str__(self):
         """Returns the string representation of the product"""
         return self.product_name or "Unnamed Product"
+
+    def get_average_rating(self):
+        """Calculate the average rating for this product"""
+        avg_rating = self.review_product.aggregate(Avg('star'))['star__avg']
+        return round(avg_rating or 0, 1)
 
 
 class Cart(models.Model):
@@ -73,6 +78,7 @@ class Review(models.Model):
     name = models.CharField(max_length=100, blank=False)
     email = models.EmailField(blank=False, null=False)
     description = models.CharField(blank=False)
+    star = models.PositiveIntegerField(choices=[(i, i) for i in range(1, 6)], default=1, blank=True)
     product = models.ForeignKey(Product, related_name='review_product', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

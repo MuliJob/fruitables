@@ -9,6 +9,11 @@
         <meta content="" name="keywords">
         <meta content="" name="description">
 
+        <style>
+            .cursor-pointer {
+                cursor: pointer;
+            }
+        </style>
     </head>
 
     <body>
@@ -62,11 +67,13 @@
                                 <p class="mb-3">Category: {{ product_detail.product_category }}</p>
                                 <h5 class="fw-bold mb-3">Ksh {{ product_detail.product_price }}</h5>
                                 <div class="d-flex mb-4">
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star text-secondary"></i>
-                                    <i class="fa fa-star"></i>
+                                    {% for i in "12345" %}
+                                        {% if forloop.counter <= average_rating%}
+                                            <i class="fa fa-star text-warning"></i>  {# Filled star #}
+                                        {% else %}
+                                            <i class="fa fa-star text-muted"></i>  {# Unfilled star #}
+                                        {% endif %}
+                                    {% endfor %}
                                 </div>
                                 <p class="mb-4">{{ product_detail.product_description }}</p>
                                 <a href="{% url 'cart_add' product_detail.id %}" class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
@@ -143,11 +150,13 @@
                                                         <div class="d-flex justify-content-between">
                                                             <h5>{{ review.name }}</h5>
                                                             <div class="d-flex mb-3">
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star text-secondary"></i>
-                                                                <i class="fa fa-star"></i>
+                                                                {% for i in "12345" %}
+                                                                    {% if forloop.counter <= review.star %}
+                                                                        <i class="fa fa-star text-secondary"></i>
+                                                                    {% else %}
+                                                                        <i class="fa fa-star text-muted"></i>
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             </div>
                                                         </div>
                                                         <p>{{ review.description }}</p>
@@ -200,12 +209,25 @@
                                         <div class="d-flex justify-content-between py-3 mb-5">
                                             <div class="d-flex align-items-center">
                                                 <p class="mb-0 me-3">Please rate:</p>
-                                                <div class="d-flex align-items-center" style="font-size: 12px;">
-                                                    <i class="fa fa-star text-muted"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
+                                                <div class="d-flex align-items-center gap-1" style="font-size: 16px;">
+                                                    <input type="radio" id="start1" name="star" value="1" class="d-none"/>
+                                                    <label for="start1" class="cursor-pointer"><i class="fa fa-star text-muted"></i></label>
+                                                
+                                                    <input type="radio" id="start2" name="star" value="2" class="d-none"/>
+                                                    <label for="start2" class="cursor-pointer"><i class="fa fa-star text-muted"></i></label>
+                                                
+                                                    <input type="radio" id="start3" name="star" value="3" class="d-none"/>
+                                                    <label for="start3" class="cursor-pointer"><i class="fa fa-star text-muted"></i></label>
+                                                
+                                                    <input type="radio" id="start4" name="star" value="4" class="d-none"/>
+                                                    <label for="start4" class="cursor-pointer"><i class="fa fa-star text-muted"></i></label>
+                                                
+                                                    <input type="radio" id="start5" name="star" value="5" class="d-none"/>
+                                                    <label for="start5" class="cursor-pointer"><i class="fa fa-star text-muted"></i></label>
+                                                </div>
+                                                
+                                                <div class="text-danger">
+                                                    {{ form.star.errors }}
                                                 </div>
                                             </div>
                                             <button type="submit" class="btn border border-secondary text-primary rounded-pill px-4 py-3"> Post Comment</button>
@@ -247,11 +269,13 @@
                                             <div>
                                                 <h6 class="mb-2">{{ fruit.product_name }}</h6>
                                                 <div class="d-flex mb-2">
-                                                    <i class="fa fa-star text-secondary"></i>
-                                                    <i class="fa fa-star text-secondary"></i>
-                                                    <i class="fa fa-star text-secondary"></i>
-                                                    <i class="fa fa-star text-secondary"></i>
-                                                    <i class="fa fa-star"></i>
+                                                    {% for i in "12345" %}
+                                                        {% if forloop.counter <= fruit.get_average_rating %}
+                                                            <i class="fa fa-star secondary"></i>
+                                                        {% else %}
+                                                            <i class="fa fa-star text-muted"></i>
+                                                        {% endif %}
+                                                    {% endfor %}
                                                 </div>
                                                 <div class="d-flex mb-2">
                                                     <h5 class="fw-bold me-2">Sh{{ fruit.product_price }}</h5>
@@ -311,6 +335,45 @@
             </div>
         </div>
         <!-- Single Product End -->
+
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const stars = document.querySelectorAll('input[type="radio"]');
+                const labels = document.querySelectorAll('label i');
+
+                function updateStars(rating) {
+                    labels.forEach((star, index) => {
+                        if (index < rating) {
+                            star.classList.add('text-secondary');
+                            star.classList.remove('text-muted');
+                        } else {
+                            star.classList.add('text-muted');
+                            star.classList.remove('text-secondary');
+                        }
+                    });
+                }
+
+                stars.forEach((star, index) => {
+                    star.addEventListener("change", () => {
+                        updateStars(index + 1);
+                    });
+                });
+
+                labels.forEach((label, index) => {
+                    label.addEventListener("click", function () {
+                        const input = stars[index];
+
+                        if (input.checked) {
+                            input.checked = false;
+                            updateStars(0);
+                        } else {
+                            input.checked = true;
+                            updateStars(index + 1);
+                        }
+                    });
+                });
+            });
+        </script>
     </body>
 
 </html>
