@@ -1,0 +1,89 @@
+{% extends 'layout/base.html' %} {% load static %} {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <title>{{ title }}</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="" name="keywords">
+        <meta content="" name="description">
+
+    </head>
+
+    <body>
+        <!-- Single Page Header start -->
+        <div class="container-fluid page-header py-5">
+            <h1 class="text-center text-white display-6">Search</h1>
+            <ol class="breadcrumb justify-content-center mb-0">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                <li class="breadcrumb-item active text-white">Search</li>
+            </ol>
+        </div>
+        <!-- Single Page Header End -->
+
+        <!-- Fruits Shop Start-->
+        <div class="container-fluid fruite py-5">
+          <div class="container py-5">
+              <div class="tab-class text-center">
+                  <div class="row g-4">
+                      <div class="col-lg-4 text-start">
+                          <h1>Search Results</h1>
+                      </div>
+                  </div>
+                  <div class="tab-content">
+                          <div id="tab-1" class="tab-pane fade show p-0 active">
+                            <div class="row g-4">
+                              {% for search in all_search_obj %}
+                                  <div class="col-md-6 col-lg-4 col-xl-3">
+                                      <a href="{% url 'product_detail' search.id %}">
+                                          <div class="rounded position-relative fruite-item">
+                                              <div class="fruite-img">
+                                                  <img src="{{ search.product_image.url }}" class="img-fluid w-100 rounded-top" alt="{{ search.product_name }}">
+                                              </div>
+                                              <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">{{ search.product_category }}</div>
+                                              <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+                                                  <h4>{{ search.product_name }}</h4>
+                                                  <p>{{ search.product_description|truncatewords:10 }}</p>
+                                                  <div class="d-flex justify-content-center flex-lg-wrap">
+                                                      <p class="text-dark fs-5 fw-bold mb-3">Sh.{{ search.product_price }} / kg</p>
+                                                      <a href="{% url 'cart_add' search.id %}" class="btn border border-secondary rounded-pill px-3 text-primary">
+                                                          <i class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart
+                                                      </a>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </a>
+                                  </div>
+                              {% endfor %}
+                            </div>
+                            <div class="pagination d-flex justify-content-center mt-5">
+                              {% if all_search_obj.has_previous %}
+                                  <a href="?search={{ all_search_obj.previous_page_number }}" class="rounded pagination-link" data-page="{{ all_search_obj.previous_page_number }}">&laquo;</a>
+                              {% endif %}
+                      
+                              {% for num in all_search_obj.paginator.page_range %}
+                                  {% if all_search_obj.number == num %}
+                                      <a href="?search={{ num }}" class="active rounded pagination-link" data-page="{{ num }}">{{ num }}</a>
+                                  {% else %}
+                                      <a href="?search={{ num }}" class="rounded pagination-link" data-page="{{ num }}">{{ num }}</a>
+                                  {% endif %}
+                              {% endfor %}
+                      
+                              {% if all_search_obj.has_next %}
+                                  <a href="?search={{ all_search_obj.next_page_number }}" class="rounded pagination-link" data-page="{{ all_search_obj.next_page_number }}">&raquo;</a>
+                              {% endif %}
+                            </div>
+                          </div>
+                  </div>
+              </div>      
+          </div>
+        </div>
+        <!-- Fruits Shop End-->
+
+        
+
+    </body>
+
+</html>
+{% endblock content %}

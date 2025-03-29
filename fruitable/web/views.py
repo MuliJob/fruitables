@@ -2,10 +2,10 @@
   Web view functions
 """
 from decimal import Decimal
-# from django.http import HttpResponseRedirect
+from django.contrib.postgres.search import SearchVector
 from django.shortcuts import render
 from django.urls import reverse
-from django.db.models import Avg, Count
+from django.db.models import Count
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -14,6 +14,26 @@ from django.core.paginator import Paginator
 from .models import Cart, CartItem, Product, Review
 from .forms import ReviewForm
 
+
+
+def search(request):
+    """Search function"""
+    title = 'FRUITABLES - SEARCH'
+    search_result = Product.objects.annotate(
+        search=SearchVector("product_name", "product_origin",
+                            "product_price", "product_check",
+                            "product_category", "product_description",
+                            "product_detail_description"),)
+    paginator = Paginator(search_result, 8)
+    page_number = request.GET.get("search")
+    all_search_obj = paginator.get_page(page_number)
+
+    context = {
+        "title": title,
+        "all_search_obj": all_search_obj,
+    }
+
+    return render(request, "search.html", context)
 
 
 
