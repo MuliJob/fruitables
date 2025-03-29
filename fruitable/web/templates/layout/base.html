@@ -52,9 +52,14 @@
                     </div>
                     <div class="modal-body d-flex align-items-center">
                         <div class="input-group w-75 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
-                            <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
+                            <input type="search" id="search-input" class="form-control p-3" placeholder="Enter keyword">
+                            <button id="search-button" class="input-group-text p-3">
+                                <i class="fa fa-search"></i>
+                            </button>
                         </div>
+                    </div>
+                    <div class="container">
+                        <ul id="search-results" class="list-group mt-3"></ul>
                     </div>
                 </div>
             </div>
@@ -90,7 +95,53 @@
         <!-- Back to Top -->
         <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
-        
+    
+    <script>
+        document.getElementById("search-input").addEventListener("input", function () {
+            let query = this.value.trim();
+
+            if (query.length > 2) {
+                fetch(`/search?q=${encodeURIComponent(query)}`, {
+                    headers: { "X-Requested-With": "XMLHttpRequest" }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    let resultsList = document.getElementById("search-results");
+                    resultsList.innerHTML = "";
+
+                    if (data.results.length > 0) {
+                        data.results.forEach(item => {
+                            let li = document.createElement("li");
+                            li.classList.add("list-group-item");
+
+                            let strong = document.createElement("strong");
+                            strong.textContent = item.product_name;
+
+                            let category = document.createElement("span");
+                            category.textContent = ` - ${item.product_category} - Sh.${item.product_price}`;
+
+                            li.appendChild(strong);
+                            li.appendChild(category);
+                            resultsList.appendChild(li);
+                        });
+                    } else {
+                        let noResultLi = document.createElement("li");
+                        noResultLi.classList.add("list-group-item", "text-danger");
+                        noResultLi.textContent = "No results found";
+                        resultsList.appendChild(noResultLi);
+                    }
+                })
+                .catch(error => console.error("Error fetching search results:", error));
+            }
+        });
+
+        document.getElementById("search-button").addEventListener("click", function () {
+            let query = document.getElementById("search-input").value.trim();
+            if (query.length > 0) {
+                window.location.href = `/search/?q=${encodeURIComponent(query)}`;
+            }
+        });
+    </script>
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

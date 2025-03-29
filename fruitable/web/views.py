@@ -2,10 +2,10 @@
   Web view functions
 """
 from decimal import Decimal
-# from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.db.models import Avg, Count
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -14,6 +14,37 @@ from django.core.paginator import Paginator
 from .models import Cart, CartItem, Product, Review
 from .forms import ReviewForm
 
+
+
+def search(request):
+    """Search function"""
+    title = 'FRUITABLES - SEARCH'
+    query = request.GET.get("q", "")
+    search_results = Product.objects.filter(
+        Q(product_name__icontains=query) |
+        Q(product_origin__icontains=query) |
+        Q(product_price__icontains=query) |
+        Q(product_check__icontains=query) |
+        Q(product_category__icontains=query) |
+        Q(product_description__icontains=query) |
+        Q(product_detail_description__icontains=query)
+    ).distinct().order_by("product_name")
+
+    paginator = Paginator(search_results, 8)
+    page_number = request.GET.get("page")
+    all_search_obj = paginator.get_page(page_number)
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        results = list(search_results.values("product_name", "product_category", "product_price"))
+        return JsonResponse({"results": results})
+
+    context = {
+        "title": title,
+        "all_search_obj": all_search_obj,
+        "query": query,
+    }
+
+    return render(request, "search.html", context)
 
 
 
