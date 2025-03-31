@@ -3,7 +3,7 @@ from django import forms
 from django.core.validators import EmailValidator
 from django.core.exceptions import ValidationError
 
-from .models import Review
+from .models import Review, Subscriber
 
 
 class ReviewForm(forms.ModelForm):
@@ -35,3 +35,11 @@ class ReviewForm(forms.ModelForm):
                 {'description': "Description must not exceed a length 255 characters."})
 
         return cleaned_data
+
+
+class SubscriberForm(forms.ModelForm):
+    """Subscriber Model"""
+    class Meta:
+        '''Class Meta'''
+        model = Subscriber
+        fields = ['email']
