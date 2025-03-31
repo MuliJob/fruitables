@@ -6,6 +6,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Avg
 
+from django_ckeditor_5.fields import CKEditor5Field
+
 
 
 PRODUCT_CATEGORIES = (
@@ -87,3 +89,29 @@ class Review(models.Model):
     def __str__(self):
         """Returns the string representation of the user review"""
         return self.name or "Unnamed"
+
+
+class Subscriber(models.Model):
+    """Subscribed users"""
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        """String representation of the email"""
+        return self.email
+
+
+class EmailTemplate(models.Model):
+    """Email Templates Model"""
+    subject = models.CharField(max_length=255)
+    message = CKEditor5Field()
+    recipients = models.ManyToManyField(Subscriber)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()
+
+    def __str__(self):
+        """String representation of the subject"""
+        return self.subject
