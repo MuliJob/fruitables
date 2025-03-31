@@ -331,7 +331,7 @@ def newsletter(request):
             context = {
                 'email': subscriber.email,
             }
-            email_content = render_to_string('newsletter/subscription_thank_you.html', context)
+            email_content = render_to_string('email/subscription_thank_you.html', context)
             email_subject = "Thank You for Subscribing"
             recipient_list = [subscriber.email]
             from_email = settings.EMAIL_HOST_USER
@@ -345,8 +345,8 @@ def newsletter(request):
                 fail_silently=False
             )
 
-            return render(request, 'newsletter/thank_you.html', context)
-    else:
-        form = SubscriberForm()
+            return JsonResponse({"success": True, "message": "Subscription successful!"})
+        else:
+            return JsonResponse({"success": False, "errors": form.errors}, status=400)
 
-    return render(request, 'index.html', {'form': form})
+    return JsonResponse({"success": False, "message": "Invalid request"}, status=400)
