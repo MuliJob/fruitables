@@ -9,10 +9,13 @@ from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
+from django.conf import settings
+from django.template.loader import render_to_string
 
 
 from .models import Cart, CartItem, Product, Review
-from .forms import ReviewForm
+from .forms import ReviewForm, SubscriberForm
 
 
 
@@ -315,3 +318,35 @@ def contact_page(request):
     }
 
     return render(request, 'contact.html', context)
+
+
+def newsletter(request):
+    """Newsletter function"""
+    if request.method == "POST":
+        form = SubscriberForm(request.POST)
+        if form.is_valid():
+
+            subscriber = form.save()
+
+            context = {
+                'email': subscriber.email,
+            }
+            email_content = render_to_string('newsletter/subscription_thank_you.html', context)
+            email_subject = "Thank You for Subscribing"
+            recipient_list = [subscriber.email]
+            from_email = settings.EMAIL_HOST_USER
+
+            send_mail(
+                email_subject,
+                '',
+                from_email,
+                recipient_list,
+                html_message=email_content,
+                fail_silently=False
+            )
+
+            return render(request, 'newsletter/thank_you.html', context)
+    else:
+        form = SubscriberForm()
+
+    return render(request, 'index.html', {'form': form})
