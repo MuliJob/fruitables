@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'web',
+    'accounts',
     'django_ckeditor_5',
 ]
 
