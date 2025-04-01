@@ -45,8 +45,11 @@ INSTALLED_APPS = [
 
     'web',
     'accounts',
+
     'django_ckeditor_5',
 ]
+
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
