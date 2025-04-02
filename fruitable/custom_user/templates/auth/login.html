@@ -11,6 +11,26 @@
     <div class="row w-100">
         <div class="col-lg-4 col-md-6 mx-auto">
             <div class="card shadow-lg border-0 rounded-lg mt-5">
+              {% if messages %}
+              {% for message in messages %}
+                  <div class="alert 
+                      {% if message.tags == 'success' %}
+                          alert-success
+                      {% elif message.tags == 'error' %}
+                          alert-danger
+                      {% elif message.tags == 'warning' %}
+                          alert-warning
+                      {% else %}
+                          alert-info
+                      {% endif %}
+                      alert-dismissible fade show" role="alert">
+                      
+                      <strong>{{ message }}</strong>
+                      
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                {% endfor %}
+              {% endif %}
                 <div class="card-body p-4">
                     <h2 class="text-center text-primary fw-bold">Login</h2>
                     <p class="text-center text-muted">Access your account</p>
