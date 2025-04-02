@@ -45,5 +45,6 @@ admin.site.register(Product)
 admin.site.register(CartItem)
 admin.site.register(Cart)
 admin.site.register(Subscriber)
+# admin.site.register(CustomUser)
 
 admin.site.register(EmailTemplate,  EmailTemplateAdmin)
