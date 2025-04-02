@@ -2,9 +2,6 @@
 from django.shortcuts import render, redirect
 
 
-
-# - Authentication models and functions
-
 from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -74,10 +71,3 @@ def user_logout(request):
     auth.logout(request)
 
     return redirect("")
-
-
-
-# @login_required(login_url="my-login")
-# def dashboard(request):
-
-#     return render(request, 'crm/dashboard.html')
