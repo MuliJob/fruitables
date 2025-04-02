@@ -26,8 +26,6 @@ def register(request):
             messages.success(request, "Account created successfully! You can now log in.")
 
             return redirect("login")
-        else:
-            messages.error(request, "Error creating account. Please check your details.")
 
     context = {
         'form':form
@@ -39,35 +37,34 @@ def register(request):
 
 def my_login(request):
     """User login"""
+
     form = LoginForm()
 
     if request.method == 'POST':
-
         form = LoginForm(request, data=request.POST)
 
         if form.is_valid():
+            print("Form is valid")
+
             email = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
+
 
             user = authenticate(request, username=email, password=password)
 
             if user is not None:
                 login(request, user)
+                messages.success(request, f"Logged in successful. Welcome {email}")
                 return redirect("shop")
             else:
                 messages.error(request, "Invalid email or password.")
 
-
-
-    context = {
-        'form':form
-      }
-
+    context = {'form': form}
     return render(request, 'auth/login.html', context=context)
 
 
 def user_logout(request):
     """Logout function"""
     auth.logout(request)
-
-    return redirect("")
+    messages.success(request, "You have been logged out.")
+    return redirect("shop")
