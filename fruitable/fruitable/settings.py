@@ -36,20 +36,22 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_use_email_as_username.apps.DjangoUseEmailAsUsernameConfig',
+
     'web',
-    'accounts',
+    
 
     'django_ckeditor_5',
 ]
 
-AUTH_USER_MODEL = "accounts.CustomUser"
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
