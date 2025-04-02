@@ -31,16 +31,38 @@
                   </div>
                   <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
               </div>
-              <div class="d-flex m-3 me-0">
-                  <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
-                  <a href="{% url 'cart_page' %}" class="position-relative me-4 my-auto">
-                      <i class="fa fa-shopping-cart fa-2x"></i>
-                      <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 21px; height: 20px; min-width: 20px;">{{ cart_count }}</span>
-                  </a>
-                  <a href="{% url 'login' %}" class="my-auto">
-                      <i class="fas fa-user fa-2x"></i>
-                  </a>
-              </div>
+              <div class="d-flex m-3 me-0 align-items-center">
+                    <button class="btn btn-outline-secondary btn-md-square rounded-circle d-flex align-items-center justify-content-center me-3"
+                        data-bs-toggle="modal" data-bs-target="#searchModal" style="width: 45px; height: 45px;">
+                        <i class="fas fa-search text-primary"></i>
+                    </button>
+                
+                    <a href="{% url 'cart_page' %}" class="btn btn-outline-secondary btn-md-square rounded-circle position-relative d-flex align-items-center justify-content-center me-3"
+                        style="width: 45px; height: 45px;">
+                        <i class="fa fa-shopping-cart text-dark"></i>
+                        <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
+                            style="top: -5px; right: -5px; height: 20px; min-width: 20px;">
+                            {{ cart_count }}
+                        </span>
+                    </a>
+                
+                    {% if request.user.is_authenticated %}
+                        <a href="" class="btn btn-outline-primary btn-md-square rounded-circle d-flex align-items-center justify-content-center me-3"
+                            style="width: 45px; height: 45px;">
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                
+                        <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-md-square rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 45px; height: 45px;">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary btn-md-square rounded-circle d-flex align-items-center justify-content-center"
+                            style="width: 45px; height: 45px;">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    {% endif %}
+                </div>
           </div>
       </nav>
   </div>

@@ -54,6 +54,7 @@ def my_login(request):
 
             if user is not None:
                 login(request, user)
+                messages.success(request, f"Logged in successful. Welcome {email}")
                 return redirect("shop")
             else:
                 messages.error(request, "Invalid email or password.")
@@ -65,5 +66,5 @@ def my_login(request):
 def user_logout(request):
     """Logout function"""
     auth.logout(request)
-
-    return redirect("")
+    messages.success(request, "You have been logged out.")
+    return redirect("shop")
