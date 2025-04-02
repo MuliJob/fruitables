@@ -4,6 +4,7 @@
 import uuid
 from django.db import models
 from django.db.models import Avg
+from django.conf import settings
 
 from django_ckeditor_5.fields import CKEditor5Field
 
@@ -53,7 +54,7 @@ class Cart(models.Model):
     cart_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     total = models.DecimalField(max_digits=9,decimal_places=2)
     quantity = models.IntegerField()
-    # user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     objects = models.Manager()
 
@@ -63,7 +64,7 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, related_name='product', on_delete=models.CASCADE)
     product_quantity = models.IntegerField(default=1)
     shipping_fee = models.DecimalField(max_digits=9,decimal_places=2, default=0.00)
-    # user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     objects = models.Manager()
 
