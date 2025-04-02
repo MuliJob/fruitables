@@ -7,31 +7,31 @@
   <title>Register</title>
 </head>
 <body>
-  <div class="container d-flex justify-content-center align-items-center" style="min-height: 120vh;">
+  <div class="container d-flex justify-content-center align-items-center" style="min-height: 130vh;">
     <div class="row w-100">
         <div class="col-lg-4 col-md-6 mx-auto">
-            <div class="card shadow-lg border-0 rounded-lg mt-5">
-              {% if messages %}
-              {% for message in messages %}
-                  <div class="alert 
-                      {% if message.tags == 'success' %}
-                          alert-success
-                      {% elif message.tags == 'error' %}
-                          alert-danger
-                      {% elif message.tags == 'warning' %}
-                          alert-warning
-                      {% else %}
-                          alert-info
-                      {% endif %}
-                      alert-dismissible fade show" role="alert">
-                      
-                      <strong>{{ message }}</strong>
-                      
-                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                {% endfor %}
-              {% endif %}
-                <div class="card-body p-4">
+          {% if messages %}
+          {% for message in messages %}
+              <div class="alert 
+                  {% if message.tags == 'success' %}
+                      alert-success
+                  {% elif message.tags == 'error' %}
+                      alert-danger
+                  {% elif message.tags == 'warning' %}
+                      alert-warning
+                  {% else %}
+                      alert-info
+                  {% endif %}
+                  alert-dismissible fade show" role="alert">
+                  
+                  <strong>{{ message }}</strong>
+                  
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+            <div class="card shadow-lg border-0 rounded-lg mt-5">              
+                <div class="card-body p-4">                  
                     <h2 class="text-center text-primary fw-bold">Register</h2>
                     <p class="text-center text-muted">Create your account</p>
 
@@ -44,6 +44,9 @@
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                 {{ form.email }}
                             </div>
+                            <div class="text-danger">
+                              {{ form.email.errors }}
+                          </div>
                         </div>
 
                         <div class="mb-3">
@@ -52,6 +55,9 @@
                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
                                 {{ form.password1 }}
                             </div>
+                            <div class="text-danger">
+                              {{ form.password1.errors }}
+                          </div>
                         </div>
 
                         <div class="mb-3">
@@ -60,6 +66,9 @@
                                 <span class="input-group-text"><i class="fas fa-check-circle"></i></span>
                                 {{ form.password2 }}
                             </div>
+                            <div class="text-danger">
+                              {{ form.password2.errors }}
+                          </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">

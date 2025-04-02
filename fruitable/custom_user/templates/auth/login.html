@@ -7,10 +7,10 @@
   <title>Login</title>
 </head>
 <body>
-  <div class="container d-flex justify-content-center align-items-center" style="min-height: 120vh;">
+  <div class="container d-flex justify-content-center align-items-center" style="min-height: 125vh;">
     <div class="row w-100">
-        <div class="col-lg-4 col-md-6 mx-auto">
-            <div class="card shadow-lg border-0 rounded-lg mt-5">
+        <div class="col-lg-4 col-md-6 mx-auto">          
+            <div class="card shadow-lg border-0 rounded-lg mt-5"> 
               {% if messages %}
               {% for message in messages %}
                   <div class="alert 
@@ -30,8 +30,8 @@
                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
                 {% endfor %}
-              {% endif %}
-                <div class="card-body p-4">
+              {% endif %}             
+                <div class="card-body p-4">                  
                     <h2 class="text-center text-primary fw-bold">Login</h2>
                     <p class="text-center text-muted">Access your account</p>
 
@@ -44,6 +44,9 @@
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
                                 {{ form.username }}
                             </div>
+                            <div class="text-danger">
+                              {{ form.username.errors }}
+                          </div>
                         </div>
 
                         <div class="mb-3">
@@ -52,6 +55,9 @@
                                 <span class="input-group-text"><i class="fas fa-key"></i></span>
                                 {{ form.password }}
                             </div>
+                            <div class="text-danger">
+                              {{ form.password.errors }}
+                          </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">
