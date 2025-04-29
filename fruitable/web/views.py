@@ -315,8 +315,20 @@ def checkout_page(request):
     """Product checkout page function"""
     title = 'FRUITABLES - CHECKOUT'
 
+    cart = Cart.objects.filter(user=request.user).first()
+
+    cart_items = CartItem.objects.filter(cart=cart)
+
+    subtotal = sum(item.product.product_price * item.product_quantity for item in cart_items)
+    shipping_total = sum(item.shipping_fee for item in cart_items)
+    grand_total = subtotal + shipping_total
+
     context = {
-        "title": title
+        "title": title,
+        "cart_items": cart_items,
+        "subtotal": subtotal,
+        "shipping_total": shipping_total,
+        "grand_total": grand_total,
     }
 
     return render(request, 'checkout.html', context)

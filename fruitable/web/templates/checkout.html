@@ -90,46 +90,24 @@
                                             <th scope="col">Name</th>
                                             <th scope="col">Price</th>
                                             <th scope="col">Quantity</th>
-                                            <th scope="col">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for item in cart_items %}
                                         <tr>
                                             <th scope="row">
                                                 <div class="d-flex align-items-center mt-2">
-                                                    <img src="{% static 'img/vegetable-item-2.jpg' %}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
+                                                    <img src="{{ item.product.product_image.url }}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="{{ item.product.product_name }}">
                                                 </div>
                                             </th>
-                                            <td class="py-5">Awesome Brocoli</td>
-                                            <td class="py-5">$69.00</td>
-                                            <td class="py-5">2</td>
-                                            <td class="py-5">$138.00</td>
+                                            <td class="py-5">{{ item.product.product_name }}</td>
+                                            <td class="py-5">Sh{{ item.product.product_price }}</td>
+                                            <td class="py-5 text-center">{{ item.product_quantity }}</td>
                                         </tr>
+                                        {% endfor %}
+                                
                                         <tr>
-                                            <th scope="row">
-                                                <div class="d-flex align-items-center mt-2">
-                                                    <img src="{% static 'img/vegetable-item-5.jpg' %}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
-                                                </div>
-                                            </th>
-                                            <td class="py-5">Potatoes</td>
-                                            <td class="py-5">$69.00</td>
-                                            <td class="py-5">2</td>
-                                            <td class="py-5">$138.00</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                                <div class="d-flex align-items-center mt-2">
-                                                    <img src="{% static 'img/vegetable-item-3.png' %}" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="">
-                                                </div>
-                                            </th>
-                                            <td class="py-5">Big Banana</td>
-                                            <td class="py-5">$69.00</td>
-                                            <td class="py-5">2</td>
-                                            <td class="py-5">$138.00</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">
-                                            </th>
+                                            <th scope="row"></th>
                                             <td class="py-5"></td>
                                             <td class="py-5"></td>
                                             <td class="py-5">
@@ -137,34 +115,34 @@
                                             </td>
                                             <td class="py-5">
                                                 <div class="py-3 border-bottom border-top">
-                                                    <p class="mb-0 text-dark">$414.00</p>
+                                                    <p class="mb-0 text-dark">Sh{{ subtotal|floatformat:2 }}</p>
                                                 </div>
                                             </td>
                                         </tr>
+                                
                                         <tr>
-                                            <th scope="row">
-                                            </th>
+                                            <th scope="row"></th>
                                             <td class="py-5">
                                                 <p class="mb-0 text-dark py-4">Shipping</p>
                                             </td>
                                             <td colspan="3" class="py-5">
                                                 <div class="form-check text-start">
-                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="Shipping">
+                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-1" name="Shipping-1" value="free">
                                                     <label class="form-check-label" for="Shipping-1">Free Shipping</label>
                                                 </div>
                                                 <div class="form-check text-start">
-                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="Shipping">
-                                                    <label class="form-check-label" for="Shipping-2">Flat rate: $15.00</label>
+                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-2" name="Shipping-1" value="15">
+                                                    <label class="form-check-label" for="Shipping-2">Flat rate: Sh15.00</label>
                                                 </div>
                                                 <div class="form-check text-start">
-                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="Shipping">
-                                                    <label class="form-check-label" for="Shipping-3">Local Pickup: $8.00</label>
+                                                    <input type="checkbox" class="form-check-input bg-primary border-0" id="Shipping-3" name="Shipping-1" value="8">
+                                                    <label class="form-check-label" for="Shipping-3">Local Pickup: Sh8.00</label>
                                                 </div>
                                             </td>
                                         </tr>
+                                
                                         <tr>
-                                            <th scope="row">
-                                            </th>
+                                            <th scope="row"></th>
                                             <td class="py-5">
                                                 <p class="mb-0 text-dark text-uppercase py-3">TOTAL</p>
                                             </td>
@@ -172,7 +150,7 @@
                                             <td class="py-5"></td>
                                             <td class="py-5">
                                                 <div class="py-3 border-bottom border-top">
-                                                    <p class="mb-0 text-dark">$135.00</p>
+                                                    <p class="mb-0 text-dark">Sh{{ grand_total|floatformat:2 }}</p>
                                                 </div>
                                             </td>
                                         </tr>
