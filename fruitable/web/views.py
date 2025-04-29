@@ -12,12 +12,36 @@ from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.contrib.auth.views import redirect_to_login
+# from django.http import HttpResponse
+# from django_daraja.mpesa.core import MpesaClient
 
 
 from .models import Cart, CartItem, Product, Review
 from .forms import ReviewForm, SubscriberForm
 
+def custom_login_required(view_func):
+    """ Custom login required decorator to add a message on redirect """
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.warning(request,
+                             "You need to be logged in to proceed. Please login below!")
+            login_url = reverse('login')
+            return redirect_to_login(request.get_full_path(), login_url)
+        return view_func(request, *args, **kwargs)
+    return wrapper
 
+# def mpesa(_request):
+#     """Mpesa function"""
+#     cl = MpesaClient()
+#     # Use a Safaricom phone number that you have access to, for you to be able to view the prompt.
+#     phone_number = '0115700930'
+#     amount = 1
+#     account_reference = 'reference'
+#     transaction_desc = 'Description'
+#     callback_url = 'https://api.darajambili.com/express-payment'
+#     response = cl.stk_push(phone_number, amount, account_reference, transaction_desc, callback_url)
+#     return HttpResponse(response)
 
 def search(request):
     """Search function"""
@@ -286,7 +310,7 @@ def cart_remove(request, pk):
 
     return redirect("cart_page")
 
-
+@custom_login_required
 def checkout_page(request):
     """Product checkout page function"""
     title = 'FRUITABLES - CHECKOUT'
