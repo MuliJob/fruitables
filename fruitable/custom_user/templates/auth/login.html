@@ -9,9 +9,8 @@
 <body>
   <div class="container d-flex justify-content-center align-items-center" style="min-height: 125vh;">
     <div class="row w-100">
-        <div class="col-lg-4 col-md-6 mx-auto">          
-            <div class="card shadow-lg border-0 rounded-lg mt-5"> 
-              {% if messages %}
+        <div class="col-lg-4 col-md-6 mx-auto">
+            {% if messages %}
               {% for message in messages %}
                   <div class="alert 
                       {% if message.tags == 'success' %}
@@ -30,7 +29,8 @@
                       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
                 {% endfor %}
-              {% endif %}             
+            {% endif %}     
+            <div class="card shadow-lg border-0 rounded-lg mt-5">             
                 <div class="card-body p-4">                  
                     <h2 class="text-center text-primary fw-bold">Login</h2>
                     <p class="text-center text-muted">Access your account</p>

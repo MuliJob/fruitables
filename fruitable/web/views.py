@@ -2,6 +2,8 @@
   Web view functions
 """
 from decimal import Decimal
+
+
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -12,12 +14,27 @@ from django.core.paginator import Paginator
 from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.contrib.auth.views import redirect_to_login
+from django.views.decorators.http import require_POST
+
+from web.mpesanumber import normalize_phone
+from web.stkpush import initiate_stk_push
+
 
 
 from .models import Cart, CartItem, Product, Review
 from .forms import ReviewForm, SubscriberForm
 
-
+def custom_login_required(view_func):
+    """ Custom login required decorator to add a message on redirect """
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.warning(request,
+                             "You need to be logged in to proceed. Please login below!")
+            login_url = reverse('login')
+            return redirect_to_login(request.get_full_path(), login_url)
+        return view_func(request, *args, **kwargs)
+    return wrapper
 
 def search(request):
     """Search function"""
@@ -287,15 +304,90 @@ def cart_remove(request, pk):
     return redirect("cart_page")
 
 
+@custom_login_required
 def checkout_page(request):
-    """Product checkout page function"""
+    """Checkout page function"""
     title = 'FRUITABLES - CHECKOUT'
+    cart = Cart.objects.filter(user=request.user).first()
+    cart_items = CartItem.objects.filter(cart=cart)
+    subtotal = sum(item.product.product_price * item.product_quantity for item in cart_items)
+    shipping_fee = 0
+
+    if request.method == 'POST':
+        if request.POST.get('ajax_request') == 'true':
+            shipping_option = request.POST.get('selected_shipping', 'free')
+            shipping_fee = 120 if shipping_option == '15' else 0
+
+            for item in cart_items:
+                item.shipping_fee = Decimal(
+                    shipping_fee) / len(
+                        cart_items) if shipping_fee else Decimal('0.00')
+                item.save()
+
+            return JsonResponse({'status': 'success'})
+
+        required_fields = ['first_name', 'last_name',
+                           'address', 'city',
+                           'postcode', 'mobile', 'email']
+        missing_fields = [field for field in required_fields if not request.POST.get(field)]
+        if missing_fields:
+            messages.error(request, "Please fill all required fields.")
+            return redirect('checkout')
+
+        shipping_fee = sum(item.shipping_fee for item in cart_items)
+        grand_total = subtotal + shipping_fee
+
+        try:
+            phone_number = normalize_phone(request.POST.get('mobile'))
+        except ValueError:
+            messages.error(request, "Please enter a valid mobile number starting with 07.")
+            return redirect('checkout')
+
+        amount = int(grand_total)
+        stk_push_success = initiate_stk_push(phone_number, amount)
+
+        if stk_push_success:
+            messages.success(request, "STK push sent. Complete payment on your phone.")
+        else:
+            messages.error(request, "Failed to initiate STK Push. Try again.")
+
+        return redirect('checkout')
+
+    else:
+        shipping_fee = sum(item.shipping_fee for item in cart_items)
+        grand_total = subtotal + shipping_fee
 
     context = {
-        "title": title
+        "title": title,
+        "cart_items": cart_items,
+        "subtotal": subtotal,
+        "shipping_fee": shipping_fee,
+        "grand_total": grand_total,
     }
-
     return render(request, 'checkout.html', context)
+
+
+@custom_login_required
+@require_POST
+def update_shipping(request):
+    """Update shipping cost based on user selection"""
+    shipping_cost = request.POST.get("shipping_cost")
+    try:
+        shipping_cost = float(shipping_cost)
+    except (ValueError, TypeError):
+        shipping_cost = 0.0
+
+    request.session['shipping_cost'] = shipping_cost
+
+    subtotal = request.session.get('subtotal', 0)
+    grand_total = float(subtotal) + shipping_cost
+
+    return JsonResponse({
+        "status": "success",
+        "shipping_cost": shipping_cost,
+        "grand_total": f"{grand_total:.2f}"
+    })
+
 
 
 def testimonial_page(request):

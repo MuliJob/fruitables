@@ -6,8 +6,10 @@ from django.contrib.auth.models import auth
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 
+from web.views import transfer_session_cart
 
-from . forms import CreateUserForm, LoginForm
+
+from .forms import CreateUserForm, LoginForm
 
 
 
@@ -49,11 +51,14 @@ def my_login(request):
             email = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
 
-
             user = authenticate(request, username=email, password=password)
 
             if user is not None:
                 login(request, user)
+
+                if 'cart' in request.session:
+                    transfer_session_cart(request)
+
                 messages.success(request, f"Logged in successful. Welcome {email}")
                 return redirect("shop")
             else:
