@@ -28,6 +28,7 @@ urlpatterns = [
     path('cart-add/<uuid:pk>/', views.cart_add, name="cart_add"),
     path('checkout/', views.checkout_page, name="checkout"),
     path('update-shipping/', views.update_shipping, name='update_shipping'),
+    path('mpesa/callback/', views.mpesa_callback, name='mpesa_callback'),
     path('testimonial/', views.testimonial_page, name="testimonial"),
     path('contact/', views.contact_page, name="contact"),
     path('newsletter/', views.newsletter, name="newsletter")
