@@ -30,7 +30,11 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'aeb8-41-89-162-2.ngrok-free.app']
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://aeb8-41-89-162-2.ngrok-free.app'
+]
 
 
 # Application definition
@@ -329,3 +333,5 @@ MPESA_PASSKEY = env('MPESA_PASSKEY')
 # Plaintext password for initiator (to be used in B2C, B2B, AccountBalance and TransactionStatusQuery Transactions)
 
 # MPESA_INITIATOR_SECURITY_CREDENTIAL = env('MPESA_INITIATOR_SECURITY_CREDENTIAL')
+
+MPESA_CALLBACK_URL = env('MPESA_CALLBACK_URL')
