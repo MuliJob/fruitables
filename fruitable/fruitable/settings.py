@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'custom_user.apps.CustomUserConfig',
 
     "django_daraja",
+    "django_browser_reload",
     'web',
 
 
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 
