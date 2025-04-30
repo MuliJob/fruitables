@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from . import views
+from . import views, stkpush
 
 urlpatterns = [
     path('', views.home_page, name="home"),
@@ -28,7 +28,7 @@ urlpatterns = [
     path('cart-add/<uuid:pk>/', views.cart_add, name="cart_add"),
     path('checkout/', views.checkout_page, name="checkout"),
     path('update-shipping/', views.update_shipping, name='update_shipping'),
-    path('mpesa/callback/', views.mpesa_callback, name='mpesa_callback'),
+    path('mpesa/callback/', stkpush.mpesa_callback, name='mpesa_callback'),
     path('testimonial/', views.testimonial_page, name="testimonial"),
     path('contact/', views.contact_page, name="contact"),
     path('newsletter/', views.newsletter, name="newsletter")
