@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.template.loader import render_to_string
 from django.contrib.auth.views import redirect_to_login
+from django.views.decorators.http import require_POST
 # from django.http import HttpResponse
 # from django_daraja.mpesa.core import MpesaClient
 
@@ -316,22 +317,74 @@ def checkout_page(request):
     title = 'FRUITABLES - CHECKOUT'
 
     cart = Cart.objects.filter(user=request.user).first()
-
     cart_items = CartItem.objects.filter(cart=cart)
 
     subtotal = sum(item.product.product_price * item.product_quantity for item in cart_items)
-    shipping_total = sum(item.shipping_fee for item in cart_items)
-    grand_total = subtotal + shipping_total
+
+    shipping_fee = 0
+
+    if request.method == 'POST':
+        shipping_option = request.POST.get('selected_shipping', 'free')
+
+        if shipping_option == '15':
+            shipping_fee = 120
+            for item in cart_items:
+                item.shipping_fee = Decimal(shipping_fee) / len(cart_items)
+                item.save()
+        else:
+
+            for item in cart_items:
+                item.shipping_fee = Decimal('0.00')
+                item.save()
+
+        if request.POST.get('ajax_request') == 'true' or request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+
+            return JsonResponse({
+                'status': 'success',
+                'shipping_fee': float(shipping_fee),
+                'grand_total': float(subtotal + shipping_fee)
+            })
+
+        if 'proceed_payment' in request.POST:
+
+            return redirect('checkout')
+    else:
+
+        shipping_fee = sum(item.shipping_fee for item in cart_items)
+
+    grand_total = subtotal + shipping_fee
 
     context = {
         "title": title,
         "cart_items": cart_items,
         "subtotal": subtotal,
-        "shipping_total": shipping_total,
+        "shipping_fee": shipping_fee,
         "grand_total": grand_total,
     }
 
     return render(request, 'checkout.html', context)
+
+
+@custom_login_required
+@require_POST
+def update_shipping(request):
+    """Update shipping cost based on user selection"""
+    shipping_cost = request.POST.get("shipping_cost")
+    try:
+        shipping_cost = float(shipping_cost)
+    except (ValueError, TypeError):
+        shipping_cost = 0.0
+
+    request.session['shipping_cost'] = shipping_cost
+
+    subtotal = request.session.get('subtotal', 0)
+    grand_total = float(subtotal) + shipping_cost
+
+    return JsonResponse({
+        "status": "success",
+        "shipping_cost": shipping_cost,
+        "grand_total": f"{grand_total:.2f}"
+    })
 
 
 def testimonial_page(request):
