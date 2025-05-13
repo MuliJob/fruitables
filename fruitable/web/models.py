@@ -77,6 +77,12 @@ class CartItem(models.Model):
         """Getting total price"""
         return (self.product.product_price * self.product_quantity) + self.shipping_fee
 
+class Order(models.Model):
+    """Order history"""
+
+
+class Transaction(models.Model):
+    """Transaction records"""
 
 class Review(models.Model):
     """Review model"""
